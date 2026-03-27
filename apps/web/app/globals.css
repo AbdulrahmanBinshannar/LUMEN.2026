@@ -1,0 +1,249 @@
+/* Outfit font — must be before tailwindcss import */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+
+@import "tailwindcss";
+
+/* ─── Lumen Design System ─────────────────────────────── */
+
+:root {
+  /* Default: Dark Mode */
+  color-scheme: dark;
+  --bg: #0A0A0B;
+  --bg-secondary: #111112;
+  --bg-card: rgba(255, 255, 255, 0.04);
+  --bg-card-hover: rgba(255, 255, 255, 0.07);
+  --bg-overlay: rgba(10, 10, 11, 0.85);
+  --bg-input: rgba(255, 255, 255, 0.06);
+
+  --volt: #CCFF00;
+  --volt-dim: rgba(204, 255, 0, 0.12);
+  --volt-border: rgba(204, 255, 0, 0.25);
+  --volt-text: #0A0A0B;
+
+  --text-primary: #F5F5F0;
+  --text-secondary: #8C8C87;
+  --text-muted: #4A4A46;
+  
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.15);
+  --nav-bg: rgba(18, 18, 20, 0.92);
+  --nav-border: rgba(255, 255, 255, 0.08);
+
+  --grid-opacity: 0.03;
+  --hero-glow: rgba(204, 255, 0, 0.08);
+  --shadow: 0 0 0 transparent;
+
+  --live: #FF3B30;
+  --success: #30D158;
+  --warning: #FF9F0A;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+}
+
+[data-theme='light'] {
+  color-scheme: light;
+  --bg: #F8F9FB;
+  --bg-secondary: #FFFFFF;
+  --bg-card: rgba(255, 255, 255, 0.8);
+  --bg-card-hover: rgba(255, 255, 255, 0.95);
+  --bg-overlay: rgba(255, 255, 255, 0.9);
+  --bg-input: #FFFFFF;
+
+  --volt: #7BB000; /* Sophisticated green for light mode */
+  --volt-dim: rgba(123, 176, 0, 0.08);
+  --volt-border: rgba(123, 176, 0, 0.2);
+  --volt-text: #FFFFFF;
+
+  --text-primary: #121214;
+  --text-secondary: #52525B;
+  --text-muted: #9494B8;
+
+  --border: rgba(0, 0, 0, 0.06);
+  --border-strong: rgba(0, 0, 0, 0.1);
+  --nav-bg: rgba(255, 255, 255, 0.9);
+  --nav-border: rgba(0, 0, 0, 0.05);
+
+  --grid-opacity: 0.05;
+  --hero-glow: rgba(123, 176, 0, 0.05);
+  --shadow: 0 10px 30px -10px rgba(0,0,0,0.08);
+}
+
+@theme inline {
+  --color-background: var(--bg);
+  --color-foreground: var(--text-primary);
+  --font-sans: 'Outfit', system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono);
+
+  --color-volt: var(--volt);
+  --color-volt-dim: var(--volt-dim);
+  --color-volt-border: var(--volt-border);
+  --color-volt-text: var(--volt-text);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-card: var(--bg-card);
+  --color-bg-card-hover: var(--bg-card-hover);
+  --color-bg-input: var(--bg-input);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-border-default: var(--border);
+  --color-border-strong: var(--border-strong);
+}
+
+/* ─── Base ─────────────────────────────────────────────── */
+
+body {
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* ─── Glassmorphism ────────────────────────────────────── */
+
+.glass {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow);
+}
+
+.glass-strong {
+  background: var(--bg-card-hover);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: var(--shadow);
+}
+
+/* ─── Hero Background ─────────────────────────────────── */
+
+.hero-gradient {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -20%, var(--hero-glow) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 60%, var(--hero-glow) 0%, transparent 50%),
+    var(--bg);
+  transition: background 0.4s ease;
+}
+
+.grid-pattern {
+  background-image:
+    linear-gradient(currentColor 1px, transparent 1px),
+    linear-gradient(90deg, currentColor 1px, transparent 1px);
+  background-size: 60px 60px;
+  color: var(--text-primary);
+  opacity: var(--grid-opacity);
+}
+
+/* ─── Animation Staggers ───────────────────────────────── */
+.stagger-1 { animation-delay: 0.1s; opacity: 0; }
+.stagger-2 { animation-delay: 0.2s; opacity: 0; }
+.stagger-3 { animation-delay: 0.3s; opacity: 0; }
+.stagger-4 { animation-delay: 0.4s; opacity: 0; }
+.stagger-5 { animation-delay: 0.5s; opacity: 0; }
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* ─── Button Styles ────────────────────────────────────── */
+
+.btn-primary {
+  background: var(--volt);
+  color: var(--volt-text);
+  font-weight: 700;
+  padding: 14px 32px;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px -4px var(--volt-border);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px -4px var(--volt-border);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-primary);
+  font-weight: 600;
+  padding: 14px 32px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-strong);
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--volt-border);
+  color: var(--volt);
+}
+
+/* ─── Form Inputs ──────────────────────────────────────── */
+
+.input-field {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+/* Dropdown specificity for select elements */
+select.input-field {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%238C8C87'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.25rem;
+  padding-right: 2.5rem;
+  appearance: none;
+}
+
+/* Aligning option tags with the settings colors */
+.input-field option {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+/* Ensure browser uses dark/light native components */
+[data-theme='dark'] select.input-field { color-scheme: dark; }
+[data-theme='light'] select.input-field { color-scheme: light; }
+
+.input-field:focus {
+  border-color: var(--volt-border);
+  box-shadow: 0 0 0 3px var(--volt-dim);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--volt) 0%, #a8e600 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

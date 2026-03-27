@@ -1,0 +1,28 @@
+node_modules/
+.turbo/
+dist/
+.next/
+.expo/
+*.local
+.env
+.env.*
+!.env.example
+__pycache__/
+*.pyc
+.venv/
+.python-version
+
+# Datasets and External ML Projects
+Saudi-Professional-League-Datasets-master/
+Football-Analysis-System-main/
+laliga-match-prediction-ml-main/
+
+# Tools and Caches
+.claude/
+.antigravity/
+.gemini/
+.idea/
+.vscode/
+*.DS_Store
+Thumbs.db
+
