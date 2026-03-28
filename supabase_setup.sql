@@ -91,3 +91,22 @@ create policy "Anyone can view likes" on public.comment_likes for select using (
 
 drop policy if exists "Authenticated users can like comments" on public.comment_likes;
 create policy "Authenticated users can like comments" on public.comment_likes for insert with check (auth.role() = 'authenticated');
+
+-- 8. Waitlist Table
+create table if not exists public.waitlist (
+  id uuid default gen_random_uuid() primary key,
+  name text,
+  email text unique not null,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+-- Enable RLS for waitlist
+alter table public.waitlist enable row level security;
+
+-- Allow anyone to insert into waitlist (lead generation)
+drop policy if exists "Anyone can join the waitlist" on public.waitlist;
+create policy "Anyone can join the waitlist" on public.waitlist for insert with check (true);
+
+-- Restrict viewing waitlist (only service role or DB owner)
+drop policy if exists "Waitlist is private" on public.waitlist;
+create policy "Waitlist is private" on public.waitlist for select using (false);

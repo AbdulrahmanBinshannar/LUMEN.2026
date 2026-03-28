@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useTranslation } from "./i18n";
 import { createClient } from "../lib/supabase";
+import InterestForm from "./components/InterestForm";
 
 export default function LandingPage() {
   const { t, dir } = useTranslation();
@@ -80,8 +81,13 @@ function HeroSection({ t, user }: { t: any; user: any }) {
           </a>
         </div>
 
+        {/* Interest Form */}
+        <div className="mt-12 animate-fade-in-up stagger-5">
+          <InterestForm />
+        </div>
+
         {/* Floating stats below CTA */}
-        <div className="animate-fade-in-up stagger-5 mt-16 flex flex-wrap items-center justify-center gap-6 md:gap-10">
+        <div className="animate-fade-in-up stagger-6 mt-16 flex flex-wrap items-center justify-center gap-6 md:gap-10">
           {[
             { value: "AI", label: "Powered Analytics" },
             { value: "⚡", label: "Real-Time Data" },
@@ -203,7 +209,7 @@ function CTASection({ t, user }: { t: any; user: any }) {
             <h2 className="text-4xl md:text-5xl font-bold mb-5">
               Ready to <span className="gradient-text">Join</span>?
             </h2>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
               {user ? (
                 <Link href="/profile" className="btn-primary text-lg !py-4 !px-12 !rounded-2xl animate-pulse-glow">
                   {t('profile')}
@@ -218,6 +224,11 @@ function CTASection({ t, user }: { t: any; user: any }) {
                   </Link>
                 </>
               )}
+            </div>
+
+            {/* Interest Form in CTA */}
+            <div className="max-w-md mx-auto">
+              <InterestForm />
             </div>
           </div>
         </div>

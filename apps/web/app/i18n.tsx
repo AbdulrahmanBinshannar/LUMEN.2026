@@ -78,6 +78,13 @@ const translations: Record<Language, Record<string, string>> = {
     rankings: 'Rankings',
     rewards_description: 'Predict matches, climb the leaderboard, and unlock exclusive rewards.',
     global_leaderboard: 'Global Leaderboard',
+    interestedTitle: 'Interested in LUMEN?',
+    interestedSubtitle: 'Join our waitlist to get early access and updates.',
+    namePlaceholder: 'Enter your name',
+    emailPlaceholder: 'Enter your email',
+    submitInterest: "I'm Interested",
+    interestSuccess: "Thanks for your interest! We'll keep you updated.",
+    interestError: 'Something went wrong. Please try again.',
   },
   ar: {
     // Nav
@@ -138,6 +145,13 @@ const translations: Record<Language, Record<string, string>> = {
     rankings: 'الترتيب',
     rewards_description: 'توقع المباريات، ارتقِ في لوحة المتصدرين، وافتح مكافآت حصرية.',
     global_leaderboard: 'لوحة المتصدرين العالمية',
+    interestedTitle: 'هل أنت مهتم بـ LUMEN؟',
+    interestedSubtitle: 'انضم إلى قائمة الانتظار للحصول على وصول مبكر وتحديثات.',
+    namePlaceholder: 'أدخل اسمك',
+    emailPlaceholder: 'أدخل بريدك الإلكتروني',
+    submitInterest: 'أنا مهتم',
+    interestSuccess: 'شكراً لاهتمامك! سنبقيك على اطلاع.',
+    interestError: 'حدث خطأ ما. يرجى المحاولة مرة أخرى.',
   }
 };
 
