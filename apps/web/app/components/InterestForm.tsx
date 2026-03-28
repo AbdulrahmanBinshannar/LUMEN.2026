@@ -16,16 +16,30 @@ export default function InterestForm() {
         setStatus('loading');
 
         try {
+            console.log('LUMEN: Submitting interest for:', { name, email });
             const { error } = await supabase
                 .from('waitlist')
                 .insert([{ name, email }]);
 
-            if (error) throw error;
+            if (error) {
+                // Check for unique constraint violation (duplicate email)
+                if (error.code === '23505') {
+                    console.log('LUMEN: Email already in waitlist');
+                    setStatus('success');
+                    setName('');
+                    setEmail('');
+                    return;
+                }
+                console.error('LUMEN: Supabase insertion error:', error);
+                throw error;
+            }
+            
+            console.log('LUMEN: Successfully joined waitlist');
             setStatus('success');
             setName('');
             setEmail('');
-        } catch (err) {
-            console.error('Error submitting interest:', err);
+        } catch (err: any) {
+            console.error('LUMEN: Critical error in InterestForm:', err.message || err);
             setStatus('error');
         }
     };
