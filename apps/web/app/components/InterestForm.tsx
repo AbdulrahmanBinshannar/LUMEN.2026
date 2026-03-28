@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createClient } from '../../lib/supabase';
 import { useTranslation } from '../i18n';
 
@@ -9,11 +9,23 @@ export default function InterestForm() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+    const [debugInfo, setDebugInfo] = useState<string | null>(null);
     const supabase = createClient();
+
+    // Diagnostic check for env vars
+    useEffect(() => {
+        const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+        const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+        if (!url || !key || url === 'undefined' || key === 'undefined') {
+            console.error('LUMEN: Supabase environment variables are missing!');
+            setDebugInfo('Missing Supabase Environment Variables');
+        }
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setStatus('loading');
+        setDebugInfo(null);
 
         try {
             console.log('LUMEN: Submitting interest for:', { name, email });
@@ -31,6 +43,7 @@ export default function InterestForm() {
                     return;
                 }
                 console.error('LUMEN: Supabase insertion error:', error);
+                setDebugInfo(`Supabase Error: ${error.message} (Code: ${error.code})`);
                 throw error;
             }
             
@@ -41,6 +54,7 @@ export default function InterestForm() {
         } catch (err: any) {
             console.error('LUMEN: Critical error in InterestForm:', err.message || err);
             setStatus('error');
+            if (!debugInfo) setDebugInfo(err.message || 'Unknown error');
         }
     };
 
@@ -53,6 +67,12 @@ export default function InterestForm() {
                             ✅
                         </div>
                         <h3 className="text-xl font-bold mb-2">{t('interestSuccess')}</h3>
+                        <button 
+                            onClick={() => setStatus('idle')}
+                            className="text-xs underline mt-4 opacity-50 hover:opacity-100 transition-opacity"
+                        >
+                            Submit another
+                        </button>
                     </div>
                 ) : (
                     <form onSubmit={handleSubmit} className="space-y-4">
@@ -96,9 +116,23 @@ export default function InterestForm() {
                         </button>
 
                         {status === 'error' && (
-                            <p className="text-xs text-center text-red-500 animate-shake">
-                                {t('interestError')}
-                            </p>
+                            <div className="text-center space-y-2">
+                                <p className="text-xs text-red-500 animate-shake">
+                                    {t('interestError')}
+                                </p>
+                                {debugInfo && (
+                                    <p className="text-[10px] text-red-400 opacity-70 break-words">
+                                        Debug: {debugInfo}
+                                    </p>
+                                )}
+                            </div>
+                        )}
+                        
+                        {/* Hidden Warning for Admins/Devs */}
+                        {debugInfo && status !== 'error' && (
+                             <p className="text-[10px] text-yellow-500 text-center opacity-50">
+                                ⚠️ {debugInfo}
+                             </p>
                         )}
                     </form>
                 )}
