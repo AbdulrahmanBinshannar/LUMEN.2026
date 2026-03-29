@@ -8,7 +8,7 @@ import os
 import asyncio
 import tempfile
 import httpx
-from fastapi import APIRouter, HTTPException, BackgroundTasks
+from fastapi import APIRouter, HTTPException, BackgroundTasks, Form
 from pydantic import BaseModel
 from ..services.analysis_pipeline import create_job, get_job, run_pipeline
 
