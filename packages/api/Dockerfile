@@ -17,9 +17,10 @@ WORKDIR /app
 RUN pip install uv
 
 # Copy dependency files first (for Docker layer caching)
-COPY pyproject.toml uv.lock ./
+# Note: uv.lock is excluded so torch resolves fresh from the CPU index defined in pyproject.toml
+COPY pyproject.toml ./
 
-# Install dependencies
+# Install dependencies using CPU-only torch (keeps image under 4 GB)
 RUN uv sync --no-dev
 
 # Copy the rest of the application

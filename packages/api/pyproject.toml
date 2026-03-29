@@ -23,3 +23,13 @@ dependencies = [
     "pandas>=2.1.0",
     "numpy>=1.26.0",
 ]
+
+# ── Force CPU-only PyTorch (avoids downloading 6 GB of CUDA packages on Railway) ──
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+torchvision = { index = "pytorch-cpu" }
+
+[[tool.uv.indexes]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
