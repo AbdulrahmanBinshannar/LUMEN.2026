@@ -7,21 +7,27 @@ GET  /analysis/{job_id}  — Get job status and results
 import os
 import asyncio
 import tempfile
-from fastapi import APIRouter, UploadFile, File, Form, HTTPException, BackgroundTasks
+import httpx
+from fastapi import APIRouter, HTTPException, BackgroundTasks
+from pydantic import BaseModel
 from ..services.analysis_pipeline import create_job, get_job, run_pipeline
 
 router = APIRouter(prefix="/analysis", tags=["analysis"])
 
 
+class AnalysisRequest(BaseModel):
+    video_url: str
+    home_team: str = "Team 1"
+    away_team: str = "Team 2"
+
+
 @router.post("/upload")
 async def upload_video(
     background_tasks: BackgroundTasks,
-    video: UploadFile = File(...),
-    home_team: str = Form("Team 1"),
-    away_team: str = Form("Team 2"),
+    request: AnalysisRequest,
 ):
     """
-    Upload a match video clip to start the analysis pipeline.
+    Receive a Supabase Storage URL for a match video and start the analysis pipeline.
 
     The pipeline runs asynchronously:
     1. YOLO video tracking (player detection, team assignment, ball control)
@@ -30,16 +36,21 @@ async def upload_video(
 
     Returns a job_id to poll for results.
     """
-    # Validate file type
-    if not video.content_type or not video.content_type.startswith("video/"):
-        raise HTTPException(status_code=400, detail="File must be a video (mp4, avi, etc.)")
+    # Download video from Supabase Storage URL into a temp file
+    try:
+        async with httpx.AsyncClient(timeout=120) as client:
+            response = await client.get(request.video_url)
+            response.raise_for_status()
+    except httpx.HTTPError as e:
+        raise HTTPException(status_code=400, detail=f"Could not download video from URL: {e}")
 
-    # Save uploaded video to temp file
-    suffix = os.path.splitext(video.filename or "video.mp4")[1] or ".mp4"
+    suffix = ".mp4"
     temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=suffix, prefix="lumen_upload_")
-    content = await video.read()
-    temp_file.write(content)
+    temp_file.write(response.content)
     temp_file.close()
+
+    home_team = request.home_team
+    away_team = request.away_team
 
     # Create job
     job_id = create_job()

@@ -7,6 +7,7 @@ import CustomSelect from '../components/CustomSelect';
 import CommentSection from '../components/CommentSection';
 import { SPL_TEAMS, useTranslation } from '../i18n';
 import { API_BASE_URL } from '@/lib/config';
+import { createClient } from '@/lib/supabase';
 
 /* ─── Types ───────────────────────────────────────────── */
 interface PlayerStat {
@@ -160,14 +161,23 @@ export default function AnalysisPage() {
     setError('');
 
     try {
-      const formData = new FormData();
-      formData.append('video', file);
-      formData.append('home_team', homeTeam);
-      formData.append('away_team', awayTeam);
+      // Step 1: upload video directly to Supabase Storage (avoids proxy size limits)
+      setProgressLabel('Uploading video to storage...');
+      const supabase = createClient();
+      const storagePath = `analysis/${Date.now()}_${file.name}`;
+      const { error: uploadError } = await supabase.storage
+        .from('videos')
+        .upload(storagePath, file, { upsert: true });
+      if (uploadError) throw new Error(`Storage upload failed: ${uploadError.message}`);
 
+      const { data: { publicUrl } } = supabase.storage.from('videos').getPublicUrl(storagePath);
+
+      // Step 2: send just the URL to the backend (tiny JSON payload, no size limit)
+      setProgressLabel('Starting analysis pipeline...');
       const res = await fetch(`${API_BASE}/analysis/upload`, {
         method: 'POST',
-        body: formData,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ video_url: publicUrl, home_team: homeTeam, away_team: awayTeam }),
       });
 
       if (!res.ok) {
