@@ -13,23 +13,31 @@ export default function Navbar() {
   const supabase = createClient();
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
+  const [dbUser, setDbUser] = useState<any>(null);
 
   useEffect(() => {
-    // Check if supabase client exists (it might be empty during static build)
     if (!supabase?.auth) return;
 
-    // Initial session check
     supabase.auth.getSession().then(({ data: { session } }: any) => {
-      setUser(session?.user ?? null);
+      const u = session?.user ?? null;
+      setUser(u);
+      if (u) fetchDbUser(u.id);
     });
 
-    // Listen for changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: string, session: any) => {
-      setUser(session?.user ?? null);
+      const u = session?.user ?? null;
+      setUser(u);
+      if (u) fetchDbUser(u.id);
+      else setDbUser(null);
     });
 
     return () => subscription.unsubscribe();
   }, [supabase]);
+
+  async function fetchDbUser(userId: string) {
+    const { data } = await supabase.from('users').select('username').eq('id', userId).single();
+    if (data) setDbUser(data);
+  }
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -70,7 +78,7 @@ export default function Navbar() {
           {user ? (
             <div className="flex items-center gap-4">
               <Link href="/profile" className="hidden sm:block text-sm font-bold" style={{ color: 'var(--volt)' }}>
-                {user.email?.split('@')[0]}
+                {dbUser?.username || user.email?.split('@')[0]}
               </Link>
               <button onClick={handleLogout} className="text-sm font-semibold opacity-60 hover:opacity-100 transition-opacity">
                 Logout

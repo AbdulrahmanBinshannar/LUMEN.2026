@@ -143,7 +143,7 @@ export default function ProfilePage() {
                 </div>
               ) : (
                 <>
-                  <h1 className="text-4xl font-bold">{userData?.full_name || t('profile')}</h1>
+                  <h1 className="text-4xl font-bold">{userData?.username || userData?.full_name || t('profile')}</h1>
                   <p className="text-[var(--text-secondary)]">@{userData?.username || 'user'}</p>
                 </>
               )}
