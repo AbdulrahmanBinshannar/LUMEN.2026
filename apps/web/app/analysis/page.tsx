@@ -170,7 +170,10 @@ export default function AnalysisPage() {
         body: formData,
       });
 
-      if (!res.ok) throw new Error('Upload failed');
+      if (!res.ok) {
+        const errBody = await res.text().catch(() => '');
+        throw new Error(`Upload failed (${res.status}): ${errBody || res.statusText}`);
+      }
       const { job_id } = await res.json();
       setJobId(job_id);
 
