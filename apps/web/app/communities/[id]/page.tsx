@@ -2,6 +2,7 @@
 
 import { useState, useEffect, use } from 'react';
 import Link from 'next/link';
+import { API_BASE_URL } from '@/lib/config';
 
 interface Community {
   id: string;
@@ -42,7 +43,7 @@ export default function CommunityDetailPage({ params }: { params: Promise<{ id: 
   const [userRole, setUserRole] = useState<'admin' | 'member' | 'none'>('admin'); // Mocking current user role
   const [loading, setLoading] = useState(true);
 
-  const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const API_BASE = API_BASE_URL;
 
   useEffect(() => {
     async function loadData() {

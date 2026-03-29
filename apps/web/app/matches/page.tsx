@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import CustomSelect from '../components/CustomSelect';
+import { API_BASE_URL } from '@/lib/config';
 
 /* ─── Types ─── */
 interface Match {
@@ -76,7 +77,7 @@ export default function MatchesPage() {
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<'all' | 'upcoming'>('all');
 
-  const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const API_BASE = API_BASE_URL;
 
   useEffect(() => {
     loadMatches();

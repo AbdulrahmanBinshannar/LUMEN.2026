@@ -2,6 +2,7 @@
 
 import { useState, useEffect, use } from 'react';
 import Link from 'next/link';
+import { API_BASE_URL } from '@/lib/config';
 
 /* ─── Types ─── */
 interface Match {
@@ -82,7 +83,7 @@ export default function MatchDetailPage({ params }: { params: Promise<{ id: stri
   const [activeTab, setActiveTab] = useState<'stats' | 'predict' | 'comments'>('stats');
   const [loading, setLoading] = useState(true);
 
-  const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const API_BASE = API_BASE_URL;
 
   useEffect(() => {
     loadMatch();

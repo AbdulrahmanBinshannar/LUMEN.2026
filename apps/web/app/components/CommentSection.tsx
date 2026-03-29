@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { createClient } from '../../lib/supabase';
+import { API_BASE_URL } from '@/lib/config';
 
 interface Comment {
   id: string;
@@ -27,7 +28,7 @@ export default function CommentSection({ matchId }: CommentSectionProps) {
   const [user, setUser] = useState<any>(null);
 
   const supabase = createClient();
-  const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const API_BASE = API_BASE_URL;
 
   /* ── Auth Check ─── */
   useEffect(() => {

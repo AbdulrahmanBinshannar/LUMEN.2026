@@ -6,6 +6,7 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import CustomSelect from '../components/CustomSelect';
 import CommentSection from '../components/CommentSection';
 import { SPL_TEAMS, useTranslation } from '../i18n';
+import { API_BASE_URL } from '@/lib/config';
 
 /* ─── Types ───────────────────────────────────────────── */
 interface PlayerStat {
@@ -131,7 +132,7 @@ export default function AnalysisPage() {
   const inputRef = useRef<HTMLInputElement>(null);
   const { t, lang, isRTL } = useTranslation();
 
-  const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const API_BASE = API_BASE_URL;
 
   /* ── File handling ─── */
   const handleFile = useCallback((f: File) => {
