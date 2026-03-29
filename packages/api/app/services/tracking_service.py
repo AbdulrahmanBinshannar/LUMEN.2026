@@ -13,8 +13,10 @@ from pathlib import Path
 from typing import Any
 
 # Add Football-Analysis-System to Python path
-FOOTBALL_ANALYSIS_DIR = Path(__file__).resolve().parents[4] / "Football-Analysis-System-main"
-if str(FOOTBALL_ANALYSIS_DIR) not in sys.path:
+# parents[2] = api root locally (packages/api/) and in Docker (/app/)
+_api_root = Path(__file__).resolve().parents[2]
+FOOTBALL_ANALYSIS_DIR = Path(os.getenv("FOOTBALL_ANALYSIS_DIR", str(_api_root / "Football-Analysis-System-main")))
+if FOOTBALL_ANALYSIS_DIR.exists() and str(FOOTBALL_ANALYSIS_DIR) not in sys.path:
     sys.path.insert(0, str(FOOTBALL_ANALYSIS_DIR))
 
 

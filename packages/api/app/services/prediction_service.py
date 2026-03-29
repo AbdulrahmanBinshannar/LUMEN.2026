@@ -4,6 +4,7 @@ Prediction Service — wraps LaLiga Match Prediction ML models.
 Loads pre-trained Gradient Boosting, Random Forest, and LightGBM models
 and generates match outcome predictions (Home Win / Draw / Away Win).
 """
+import os
 import sys
 from pathlib import Path
 from typing import Any
@@ -13,7 +14,9 @@ import pandas as pd
 import joblib
 
 # Path to the prediction ML project
-PREDICTION_ML_DIR = Path(__file__).resolve().parents[4] / "laliga-match-prediction-ml-main"
+# parents[2] = api root locally (packages/api/) and in Docker (/app/)
+_api_root = Path(__file__).resolve().parents[2]
+PREDICTION_ML_DIR = Path(os.getenv("PREDICTION_ML_DIR", str(_api_root / "laliga-match-prediction-ml-main")))
 MODELS_DIR = PREDICTION_ML_DIR / "models"
 DATA_DIR = PREDICTION_ML_DIR / "data" / "processed"
 
