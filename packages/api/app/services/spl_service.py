@@ -9,7 +9,10 @@ import os
 from pathlib import Path
 from typing import Any
 
-SPL_DATA_DIR = Path(__file__).resolve().parents[4] / "Saudi-Professional-League-Datasets-master"
+# parents[2] = packages/api/ locally, /app/ in Docker.
+# Also supports SPL_DATA_DIR env var so the path can be overridden without code changes.
+_api_root = Path(__file__).resolve().parents[2]
+SPL_DATA_DIR = Path(os.getenv("SPL_DATA_DIR", str(_api_root / "Saudi-Professional-League-Datasets-master")))
 
 # Cache
 _matches: list[dict[str, Any]] = []
@@ -29,6 +32,10 @@ def _load_all_matches():
     global _matches, _loaded
     if _loaded:
         return
+
+    if not SPL_DATA_DIR.exists():
+        _loaded = True
+        return  # Dataset folder not present — return empty list gracefully
 
     match_id = 0
     for csv_file in sorted(SPL_DATA_DIR.glob("SPL-*-FS.csv")):
